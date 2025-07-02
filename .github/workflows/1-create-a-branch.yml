@@ -63,4 +63,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           from_step: 1
           to_step: 2
+          
+  deploy_test:
+    name: Attempt to Deploy
+    runs-on: ubuntu-latest
+    environment: First-Environment-FOR-USER05
+    steps:
+      - run: echo "Trying to run a step in the protected environment."
           branch_name: my-first-branch
